@@ -6,7 +6,7 @@ import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
-router.use(express.urlencoded({ extended: true }));
+router.use(express.json());
 
 
 // Register route

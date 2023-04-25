@@ -5,7 +5,7 @@ import SECRET_KEY from '../config.js';
 
 const router = express.Router();
 
-router.use(express.urlencoded({ extended: true }));
+router.use(express.json());
 
 function verifyToken(req, res, next) {
     const bearer = req.headers['authorization'].split(" ");
