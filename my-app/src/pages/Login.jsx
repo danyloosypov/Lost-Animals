@@ -29,12 +29,16 @@ function Login() {
       .then(response => {
         const token = response.data.token;
         document.cookie = `token=${token}`;
+
+
         const cookieValue = document.cookie
         .split(';')
         .map(cookie => cookie.split('='))
         .find(([key, value]) => key.trim() === 'token');
         const storedToken = cookieValue ? cookieValue[1] : null;
         console.log('Token', storedToken);
+
+        
       })
       .catch(error => {
         // Handle login error

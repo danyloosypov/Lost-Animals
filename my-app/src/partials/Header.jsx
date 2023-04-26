@@ -16,56 +16,53 @@ export default function Header() {
 
   return (
     <header>
-      <MDBNavbar expand='lg' light bgColor='white' fixed>
-        <MDBContainer fluid>
-          <MDBNavbarToggler
-            aria-controls='navbarExample01'
-            aria-expanded='false'
-            aria-label='Toggle navigation'
-          >
-            <MDBIcon fas icon='bars' />
-          </MDBNavbarToggler>
-          <MDBCollapse show={showBasic}>
-            <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#709085' }}/>
-            <MDBNavbarNav right className='mb-2 mb-lg-0'>
-              <MDBNavbarItem active>
-                <MDBNavbarLink aria-current='page' href='#'>
-                  Home
-                </MDBNavbarLink>
-              </MDBNavbarItem>
-              <MDBNavbarItem>
-                <MDBNavbarLink href='/lost-animals'>Lost Animals</MDBNavbarLink>
-              </MDBNavbarItem>
-              <MDBNavbarItem>
-                <MDBNavbarLink href='/found-animals'>Found Animals</MDBNavbarLink>
-              </MDBNavbarItem>
-              <MDBNavbarItem>
-                <MDBNavbarLink href='/account'>My Account</MDBNavbarLink>
-              </MDBNavbarItem>
-              <MDBNavbarItem className='ms-auto'>
-                <MDBNavbarLink href='#'>Logout</MDBNavbarLink>
-              </MDBNavbarItem>
-            </MDBNavbarNav>
-          </MDBCollapse>
-        </MDBContainer>
-      </MDBNavbar>
+      <nav className="navbar navbar-expand-lg navbar-light bg-light">
+  <MDBIcon fas icon="crow fa-3x me-3" style={{ color: '#709085', marginLeft: 30 }} />
+  <a className="navbar-brand" href="/">
+    4Paws
+  </a>
+  <button
+    className="navbar-toggler"
+    type="button"
+    data-toggle="collapse"
+    data-target="#navbarNav"
+    aria-controls="navbarNav"
+    aria-expanded="false"
+    aria-label="Toggle navigation"
+  >
+    <span className="navbar-toggler-icon"></span>
+  </button>
+  <div className="collapse navbar-collapse" id="navbarNav">
+    <ul className="navbar-nav ml-auto">
+      <li className="nav-item active">
+        <a className="nav-link" href="/">
+          Home
+        </a>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" href="/lost-animals">
+          Lost Animals
+        </a>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" href="/found-animals">
+          Found Animals
+        </a>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" href="/my-account">
+          My Account
+        </a>
+      </li>
+      <li className="nav-item">
+        <a className="nav-link" href="#">
+          Logout
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
-      <div className='p-5 text-center bg-light'>
-        <h1 className='mb-3'>Heading</h1>
-        <h4 className='mb-3'>Subheading</h4>
-        <MDBBtn tag="a" outline size="lg">
-          Call to action
-        </MDBBtn>
-      </div>
-
-      <p className='mt-4'>Scroll down</p>
-      <p>Scroll down</p>
-      <p>Scroll down</p>
-      <p>Scroll down</p>
-      <p>Scroll down</p>
-      <p>Scroll down</p>
-      <p>Scroll down</p>
-      <p>Scroll down</p>
     </header>
   );
 }
