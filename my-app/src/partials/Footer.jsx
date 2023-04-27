@@ -3,7 +3,7 @@ import { MDBFooter } from 'mdb-react-ui-kit';
 
 export default function Footer() {
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', marginTop:'60px' }}>
       <div style={{ flex: '1' }}>
         {/* Your page content here */}
       </div>

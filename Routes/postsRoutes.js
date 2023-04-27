@@ -17,13 +17,11 @@ function verifyToken(req, res, next) {
     const bearer = req.headers['authorization'].split(" ");
     const token = bearer[1];
     if (!token) {
-        console.log(1);
         return res.status(401).send('Unauthorized request');
     }
   
     jwt.verify(token, SECRET_KEY, (err, decoded) => {
         if (err) {
-            console.log(2);
             return res.status(401).send('Unauthorized request');
         }
         req.user = decoded;
@@ -58,8 +56,47 @@ const upload = multer({
   });
   
   // READ all posts
-router.get('/', verifyToken, (req, res) => {
-    const sql = `SELECT * FROM posts`;
+  router.get('/', verifyToken, (req, res) => {
+    const animalId = req.body.animal_id;
+    const animalBreed = req.body.animal_breed;
+    const animalColor = req.body.animal_color;
+    const animalGender = req.body.animal_gender;
+    const description = req.body.description;
+    const location = req.body.location;
+
+    let sql = `SELECT * FROM posts`;
+
+    let filters = [];
+
+    if (animalId) {
+        filters.push(`animal_id = ${animalId}`);
+    }
+
+    if (animalBreed) {
+        filters.push(`animal_breed LIKE '%${animalBreed}%'`);
+    }
+
+    if (animalColor) {
+        filters.push(`animal_color LIKE '%${animalColor}%'`);
+    }
+
+    if (animalGender) {
+        filters.push(`animal_gender = '${animalGender}'`);
+    }
+
+    if (location) {
+        filters.push(`location LIKE '%${location}%'`);
+    }
+
+    if (description) {
+        filters.push(`description LIKE '${description}'`);
+    }
+
+    if (filters.length > 0) {
+        sql += ` WHERE ${filters.join(' AND ')}`;
+    }
+    console.log(sql);
+
     db.all(sql, [], (err, rows) => {
         if (err) {
             console.error(err.message);
@@ -69,6 +106,7 @@ router.get('/', verifyToken, (req, res) => {
         }
     });
 });
+
   
   // READ a specific post by ID
 router.get('/:id', verifyToken, (req, res) => {
@@ -130,38 +168,44 @@ router.get('/:id', verifyToken, (req, res) => {
     });
   });
 
-
-  /// изначальный метод update
-  /*router.put('/update/:id', (req, res) => {
+  router.delete('/delete/:id', verifyToken, (req, res) => {
     const { id } = req.params;
-    const { post_mode, animal_id, user_id, animal_breed, animal_color, animal_gender, location, post_image, description } = req.body;
-    const sql = `UPDATE posts SET post_mode = ?, animal_id = ?, user_id = ?, animal_breed = ?, animal_color = ?, animal_gender = ?, location = ?, post_image = ?, description = ? WHERE post_id = ?`;
-    db.run(sql, [post_mode, animal_id, user_id, animal_breed, animal_color, animal_gender, location, post_image, description, id], function(err) {
-      if (err) {
-        console.error(err.message);
-        res.status(500).json({ error: 'Internal server error' });
-      } else if (this.changes === 0) {
-        res.status(404).json({ error: 'Post not found' });
-      } else {
-        res.status(200).json({ message: 'Operation completed successfully' });
-      }
-    });
-  });*/
+    const sqlGetPost = `SELECT * FROM posts WHERE post_id = ?`;
+    const sqlDeletePost = `DELETE FROM posts WHERE post_id = ?`;
 
-router.delete('/delete/:id', verifyToken, (req, res) => {
-    const { id } = req.params;
-    const sql = `DELETE FROM posts WHERE post_id = ?`;
-    db.run(sql, [id], function(err) {
+    db.get(sqlGetPost, [id], (err, row) => {
         if (err) {
             console.error(err.message);
             res.status(500).json({ error: 'Internal server error' });
-        } else if (this.changes === 0) {
+        } else if (!row) {
             res.status(404).json({ error: 'Post not found' });
         } else {
-            res.status(200).json({ message: 'Operation completed successfully' });
+            const postImage = row.post_image;
+
+            // Delete the post image file
+            if (postImage) {
+              fs.unlink('uploads/' + postImage, (err) => {
+                if (err) {
+                  console.error(err);
+                } else {
+                  console.log('Image file deleted successfully');
+                }
+              });
+            }
+
+            // Delete the post from the database
+            db.run(sqlDeletePost, [id], function(err) {
+                if (err) {
+                    console.error(err.message);
+                    res.status(500).json({ error: 'Internal server error' });
+                } else {
+                    res.status(200).json({ message: 'Operation completed successfully' });
+                }
+            });
         }
     });
 });
+
 
 
 export default router;

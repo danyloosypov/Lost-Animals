@@ -8,6 +8,10 @@ const PostCard = () => {
         <h5 className="card-title">Card title</h5>
         <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
       </div>
+      <button className="btn btn-danger" style={{ borderRadius: '50%', position: 'absolute', top: '10px', right: '10px', padding: '8px' }}>
+          <i className="fas fa-heart"></i>
+        </button>
+        <button className='btn btn-outline-primary'>respond</button>
     </div>
   );
 };

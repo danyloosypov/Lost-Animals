@@ -1,6 +1,7 @@
 import React from 'react'
 import Sidebar from '../partials/Sidebar';
 
+
 const LostPage = () => {
   return (
     <div style={{ display: 'flex', height: '100%' }}>
