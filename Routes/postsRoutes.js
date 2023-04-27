@@ -63,10 +63,15 @@ const upload = multer({
     const animalGender = req.body.animal_gender;
     const description = req.body.description;
     const location = req.body.location;
+    const post_mode = req.body.post_mode;
 
     let sql = `SELECT * FROM posts`;
 
     let filters = [];
+
+    if (post_mode) {
+      filters.push(`post_mode = ${post_mode}`);
+    }
 
     if (animalId) {
         filters.push(`animal_id = ${animalId}`);
