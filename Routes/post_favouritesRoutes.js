@@ -69,6 +69,21 @@ router.get('/:id', verifyToken, (req, res) => {
     });
 });
 
+router.get('/my-favourites/:id', verifyToken, (req, res) => {
+    const { id } = req.params;
+    const sql = `SELECT * FROM post_favourites WHERE user_id = ?`;
+    db.get(sql, [id], (err, row) => {
+        if (err) {
+            console.error(err.message);
+            res.status(500).json({ error: 'Internal server error' });
+        } else if (!row) {
+            res.status(404).json({ error: 'Posts not found' });
+        } else {
+            res.status(200).json(row);
+        }
+    });
+});
+
 // DELETE a post favourite by ID
 router.delete('/:id', verifyToken, (req, res) => {
     const { id } = req.params;
@@ -84,6 +99,7 @@ router.delete('/:id', verifyToken, (req, res) => {
         }
     });
 });
+
 
 // UPDATE a post favourite by ID
 router.put('/update/:id', verifyToken, (req, res) => {

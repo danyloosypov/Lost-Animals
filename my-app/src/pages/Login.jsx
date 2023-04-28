@@ -28,7 +28,9 @@ function Login() {
       user_password: password }, { headers })
       .then(response => {
         const token = response.data.token;
+        const user_id = response.data.user_id;
         document.cookie = `token=${token}`;
+        document.cookie = `user_id=${user_id}`;
 
 
         const cookieValue = document.cookie

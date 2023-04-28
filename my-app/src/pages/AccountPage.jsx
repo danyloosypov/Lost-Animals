@@ -104,6 +104,12 @@ const AccountPage = () => {
           </Button>
         </Form>
         </Tab>
+        <Tab eventKey="deleteAccount" title="Delete Account">
+        <div style={{marginTop:'64px'}}>
+          <h3>Are you sure?</h3>
+          <button className="btn btn-danger">Confirm</button>
+        </div>
+        </Tab>
         </Tabs>
       </Container>
       

@@ -56,14 +56,14 @@ const upload = multer({
   });
   
   // READ all posts
-  router.get('/', verifyToken, (req, res) => {
-    const animalId = req.body.animal_id;
-    const animalBreed = req.body.animal_breed;
-    const animalColor = req.body.animal_color;
-    const animalGender = req.body.animal_gender;
-    const description = req.body.description;
-    const location = req.body.location;
-    const post_mode = req.body.post_mode;
+  router.get('/', (req, res) => {
+    const animalId = req.query.animal_id;
+    const animalBreed = req.query.animal_breed;
+    const animalColor = req.query.animal_color;
+    const animalGender = req.query.animal_gender;
+    const description = req.query.description;
+    const location = req.query.location;
+    const post_mode = req.query.post_mode;
 
     let sql = `SELECT * FROM posts`;
 
@@ -114,7 +114,7 @@ const upload = multer({
 
   
   // READ a specific post by ID
-router.get('/:id', verifyToken, (req, res) => {
+router.get('/:id', (req, res) => {
     const { id } = req.params;
     const sql = `SELECT * FROM posts WHERE post_id = ?`;
     db.get(sql, [id], (err, row) => {
@@ -123,6 +123,21 @@ router.get('/:id', verifyToken, (req, res) => {
             res.status(500).json({ error: 'Internal server error' });
         } else if (!row) {
             res.status(404).json({ error: 'Post not found' });
+        } else {
+            res.status(200).json(row);
+        }
+    });
+});
+
+router.get('/my-posts/:id', verifyToken, (req, res) => {
+    const { id } = req.params;
+    const sql = `SELECT * FROM posts WHERE user_id = ?`;
+    db.get(sql, [id], (err, row) => {
+        if (err) {
+            console.error(err.message);
+            res.status(500).json({ error: 'Internal server error' });
+        } else if (!row) {
+            res.status(404).json({ error: 'Posts not found' });
         } else {
             res.status(200).json(row);
         }

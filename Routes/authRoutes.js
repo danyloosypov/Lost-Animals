@@ -66,12 +66,14 @@ router.post('/register', async (req, res) => {
         }
   
         // Generate JWT token
-        const token = jwt.sign({ userId: row.id }, SECRET_KEY, { expiresIn: '1h' });
+        const token = jwt.sign({ userId: row.user_id }, SECRET_KEY, { expiresIn: '1h' });
 
         console.log(token)
+
+        console.log(row.user_id)
   
         // Send success response with JWT token
-        res.json({ token });
+        res.json({ token, user_id: row.user_id  });
       });
     } catch (err) {
       console.error(err);
