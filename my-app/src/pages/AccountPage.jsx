@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react'
 import { Container, Form, Button, Tab, Tabs } from 'react-bootstrap';
 import PostCard from '../components/PostCard';
-
+import Service from '../API/Service'
+import axios from 'axios';
 
 
 const AccountPage = () => {
   const [userFirstName, setUserFirstName] = useState('');
   const [userLastName, setUserLastName] = useState('');
-  const [userPassword, setUserPassword] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [myPosts, setMyPosts] = useState([]);
+  const [myFavourites, setMyFavourites] = useState([]);
   const [userPhone, setUserPhone] = useState('');
   const [activeTab, setActiveTab] = useState('likedPosts'); // State to keep track of active tab
 
@@ -17,11 +19,45 @@ const AccountPage = () => {
     // Perform form submission logic here
   }
 
+  function getUserId() {
+    const cookieValue = document.cookie
+    .split(';')
+    .map(cookie => cookie.split('='))
+    .find(([key, value]) => key.trim() === 'user_id');
+    const storedUser = cookieValue ? cookieValue[1] : null;
+    return storedUser;
+  }
+
 
 
   const handleTabSelect = (tabKey) => {
     setActiveTab(tabKey);
   }
+
+  const handleDeleteUser = (e) => {
+    const storedUser = getUserId();
+        if(storedUser !== null) {
+          const response = Service.deleteUser(storedUser);
+          console.log(response);
+        }
+  }
+
+  useEffect(() => {
+    const user_id = getUserId();
+   
+    const fetchData = async () => {
+      const response = await Service.getPersonalData(user_id);
+      setUserFirstName(response.user_firstname);
+      setUserLastName(response.user_lastname);
+      setUserEmail(response.user_email);
+      setUserPhone(response.user_phone);
+      const result = await axios.get('/my-favourites/' + user_id);
+      setMyFavourites(result.data);
+      const posts = await axios.get('/my-posts/' + user_id);
+      setMyPosts(posts.data);
+    };
+    fetchData();
+  }, []);
 
 
   return (
@@ -34,14 +70,22 @@ const AccountPage = () => {
         <Tab eventKey="likedPosts" title="Liked Posts">
         <div style={{marginTop:'64px'}}>
           <h3>Liked posts</h3>
-          
+          <div className="post-grid">
+            {myFavourites.map(post => (
+              <PostCard key={post.post_id} post={post} />
+            ))}
+          </div>
         </div>
         </Tab>
 
         <Tab eventKey="myPosts" title="My Posts">
         <div style={{marginTop:'64px'}}>
           <h3>My posts</h3>
-          
+          <div className="post-grid">
+            {myPosts.map(post => (
+              <PostCard key={post.post_id} post={post} />
+            ))}
+          </div>
         </div>
         </Tab>
         
@@ -68,16 +112,6 @@ const AccountPage = () => {
             />
           </Form.Group>
           <br />
-          <Form.Group controlId="userPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control
-              type="password"
-              placeholder="Enter your password"
-              value={userPassword}
-              onChange={(e) => setUserPassword(e.target.value)}
-            />
-          </Form.Group>
-          <br />
           <Form.Group controlId="userEmail">
             <Form.Label>Email</Form.Label>
             <Form.Control
@@ -100,14 +134,14 @@ const AccountPage = () => {
           <br />
           <br />
           <Button variant="primary" type="submit">
-            Submit
+            Update
           </Button>
         </Form>
         </Tab>
         <Tab eventKey="deleteAccount" title="Delete Account">
         <div style={{marginTop:'64px'}}>
           <h3>Are you sure?</h3>
-          <button className="btn btn-danger">Confirm</button>
+          <button className="btn btn-danger" onClick={handleDeleteUser}>Confirm</button>
         </div>
         </Tab>
         </Tabs>

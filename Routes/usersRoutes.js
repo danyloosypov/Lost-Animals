@@ -2,14 +2,23 @@ import express from 'express';
 import {db} from '../db/db.js'; 
 import jwt from 'jsonwebtoken';
 import SECRET_KEY from '../config.js';
+import cors from 'cors';
+
 
 const router = express.Router();
 
 router.use(express.json());
 
+router.use(cors({
+    origin: 'http://localhost:3000'
+  }));
+
+
 function verifyToken(req, res, next) {
-    const bearer = req.headers['authorization'].split(" ");
-    const token = bearer[1];
+    /*const bearer = req.headers['authorization'].split(" ");
+    const token = bearer[1];*/
+    const token = req.headers['authorization'];
+    console.log(token)
     if (!token) {
         console.log(1);
         return res.status(401).send('Unauthorized request');
@@ -89,6 +98,7 @@ router.put('/update/:user_id', verifyToken, (req, res) => {
 
 router.delete('/delete/:user_id', verifyToken, (req, res) => {
     const { user_id } = req.params;
+    console.log(user_id)
   
     db.run('DELETE FROM users WHERE user_id = ?', [user_id], function(err) {
         if (err) {

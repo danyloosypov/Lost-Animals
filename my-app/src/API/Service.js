@@ -2,6 +2,10 @@ import axios from 'axios';
 
 
 export default class Service {
+
+
+
+    
     static async getLostAnimals(data) {
         try {
             const posts = await axios.get('http://localhost:3001/posts/', { params: data })
@@ -23,8 +27,17 @@ export default class Service {
     }
 
     static async getPersonalData(id) {
+        const cookieValue = document.cookie
+        .split(';')
+        .map(cookie => cookie.split('='))
+        .find(([key, value]) => key.trim() === 'token');
+        const token = cookieValue ? cookieValue[1] : null;
         try {
-            const response = await axios.put('http://localhost:3001/users/' + id)
+            const config = {
+                headers: { Authorization: `${token}` }
+            }
+            const response = await axios.get('http://localhost:3001/users/' + id, config)
+            console.log("sdfsfs", response.data)
             return response.data
         } catch (error) {
             console.log(error)
@@ -32,9 +45,22 @@ export default class Service {
     }
 
     static async deleteUser(id) {
+
+        const cookieValue = document.cookie
+        .split(';')
+        .map(cookie => cookie.split('='))
+        .find(([key, value]) => key.trim() === 'token');
+        const token = cookieValue ? cookieValue[1] : null;
+
         try {
-            const response = await axios.delete('http://localhost:3001/users/' + id)
-            return response.data
+            const config = {
+                headers: { Authorization: `${token}` }
+            }
+            const response = await axios.delete('http://localhost:3001/users/delete/' + id, config)
+            alert(response.data.message)
+            document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:01 GMT;'; // Delete the token cookie
+            document.cookie = 'user_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            return response.data.message
         } catch (error) {
             console.log(error)
         }

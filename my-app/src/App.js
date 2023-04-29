@@ -4,10 +4,11 @@ import {BrowserRouter, Route, Routes} from "react-router-dom";
 import Login from './pages/Login';
 import Registration from './pages/Registration';
 import AccountPage from './pages/AccountPage';
-import CreatePost from './pages/CreatePost';
+import PostForm from './pages/PostForm';
 import FoundPage from './pages/FoundPage';
 import HomePage from './pages/HomePage';
 import LostPage from './pages/LostPage';
+import PostPage from './pages/PostPage';
 import Header from './partials/Header';
 import Footer from './partials/Footer';
 import Layout from './components/Layout';
@@ -64,6 +65,16 @@ function App() {
             element={
               <Layout>
                 <AccountPage /> {/* HomePage component */}
+              </Layout>
+            }
+          />
+
+
+          <Route
+            path="/post/:id"
+            element={
+              <Layout>
+                <PostPage /> {/* HomePage component */}
               </Layout>
             }
           />

@@ -17,6 +17,10 @@ function Registration() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [phone, setPhone] = useState('');
+    const [firstName, setFirstname] = useState('');
+    const [lastName, setLastName] = useState('');
+
     const headers = {
         'Content-Type': 'application/json', // Example header
       };
@@ -27,10 +31,10 @@ function Registration() {
         console.log("password", password);
       // Perform login action using Axios
       Axios.post('/auth/register', { user_email: email,
-        user_password: password }, { headers })
+        user_password: password, user_phone: phone, user_lastname: lastName, user_firstname: firstName }, { headers })
         .then(response => {
           // Handle successful login
-          console.log('Login successful', response.data.token);
+          console.log('Login successful');
         })
         .catch(error => {
           // Handle login error
@@ -67,19 +71,19 @@ function Registration() {
 
               <MDBRow>
                 <MDBCol col='6'>
-                  <MDBInput wrapperClass='mb-4' label='First name' id='form1' type='text'/>
+                  <MDBInput wrapperClass='mb-4' label='First name' id='form1' type='text' value={firstName} onChange={(e) => setFirstname(e.target.value)}/>
                 </MDBCol>
 
                 <MDBCol col='6'>
-                  <MDBInput wrapperClass='mb-4' label='Last name' id='form1' type='text'/>
+                  <MDBInput wrapperClass='mb-4' label='Last name' id='form1' type='text' value={lastName} onChange={(e) => setLastName(e.target.value)}/>
                 </MDBCol>
               </MDBRow>
 
-              <MDBInput wrapperClass='mb-4' label='Email' id='form1' type='email'/>
-              <MDBInput wrapperClass='mb-4' label='phone' id='form1' type='phone'/>
-              <MDBInput wrapperClass='mb-4' label='Password' id='form1' type='password'/>
+              <MDBInput wrapperClass='mb-4' label='Email' id='form1' type='email' value={email} onChange={(e) => setEmail(e.target.value)}/>
+              <MDBInput wrapperClass='mb-4' label='phone' id='form1' type='phone' value={phone} onChange={(e) => setPhone(e.target.value)}/>
+              <MDBInput wrapperClass='mb-4' label='Password' id='form1' type='password' value={password} onChange={(e) => setPassword(e.target.value)}/>
 
-              <MDBBtn className='w-100 mb-4' size='md'>sign up</MDBBtn>
+              <MDBBtn className='w-100 mb-4' size='md' onClick={handleRegister}>sign up</MDBBtn>
               <p className="small fw-bold mt-2 pt-1 mb-2">Already have an account? <a href="/login" className="link-danger">Log In</a></p>
 
 

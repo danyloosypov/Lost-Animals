@@ -1,7 +1,9 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 
 const PostCard = ({ post }) => {
   const limitedText = post.description.slice(0, 100) + (post.description.length > 100 ? '...' : '');
+  const navigate = useNavigate()
 
   return (
     <div className="card">
@@ -13,7 +15,7 @@ const PostCard = ({ post }) => {
       <button className="btn btn-danger" style={{ borderRadius: '50%', position: 'absolute', top: '10px', right: '10px', padding: '8px' }}>
           <i className="fas fa-heart"></i>
         </button>
-        <button className='btn btn-outline-primary'>respond</button>
+        <button className='btn btn-outline-primary' onClick={()=>navigate(`/post/${post.post_id}`)}>respond</button>
     </div>
   );
 };
