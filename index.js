@@ -5,9 +5,14 @@ import postsRoutes from './Routes/postsRoutes.js'; // Import the users routes
 import postsFavouritesRoutes from './Routes/post_favouritesRoutes.js'; // Import the users routes
 import authRoutes from './Routes/authRoutes.js'; // Import the users routes
 
+import path from 'path';
 
 const PORT = 3001;
-const app = express()
+const app = express();
+
+app.use(express.static('./uploads'));
+
+
 
 app.use('/auth', authRoutes);
   
