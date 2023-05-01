@@ -8,8 +8,10 @@ const router = express.Router();
 router.use(express.json());
 
 function verifyToken(req, res, next) {
-    const bearer = req.headers['authorization'].split(" ");
-    const token = bearer[1];
+    /*const bearer = req.headers['authorization'].split(" ");
+    const token = bearer[1];*/
+    const token = req.headers['authorization'];
+    console.log(token)
     if (!token) {
         console.log(1);
         return res.status(401).send('Unauthorized request');

@@ -5,29 +5,38 @@ import multer from 'multer';
 import SECRET_KEY from '../config.js';
 import path from 'path';
 import fs from 'fs';
+import cors from 'cors';
 
 const router = express.Router();
 
 router.use(express.json());
+
+router.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 
 function verifyToken(req, res, next) {
-    const bearer = req.headers['authorization'].split(" ");
-    const token = bearer[1];
-    if (!token) {
-        return res.status(401).send('Unauthorized request');
-    }
-  
-    jwt.verify(token, SECRET_KEY, (err, decoded) => {
-        if (err) {
-            return res.status(401).send('Unauthorized request');
-        }
-        req.user = decoded;
-        next();
-    });
+  /*const bearer = req.headers['authorization'].split(" ");
+  const token = bearer[1];*/
+  const token = req.headers['authorization'];
+  console.log(token)
+  if (!token) {
+      console.log(1);
+      return res.status(401).send('Unauthorized request');
+  }
+
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+      if (err) {
+          console.log(2);
+          return res.status(401).send('Unauthorized request');
+      }
+      req.user = decoded;
+      next();
+  });
 }
 
 const upload = multer({
@@ -133,7 +142,7 @@ router.get('/:id', (req, res) => {
 router.get('/my-posts/:id', verifyToken, (req, res) => {
     const { id } = req.params;
     const sql = `SELECT * FROM posts WHERE user_id = ?`;
-    db.get(sql, [id], (err, row) => {
+    db.all(sql, [id], (err, row) => {
         if (err) {
             console.error(err.message);
             res.status(500).json({ error: 'Internal server error' });

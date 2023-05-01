@@ -29,9 +29,9 @@ const LostPage = () => {
         }
       });
       setPosts(result.data);
+      console.log(posts)
     };
     fetchData();
-    console.log(locationFilter, speciesFilter, colorFilter, searchFilter, genderFilter)
   }, [locationFilter, speciesFilter, colorFilter, searchFilter, genderFilter]);
 
 

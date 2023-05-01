@@ -9,9 +9,9 @@ const AccountPage = () => {
   const [userFirstName, setUserFirstName] = useState('');
   const [userLastName, setUserLastName] = useState('');
   const [userEmail, setUserEmail] = useState('');
-  const [myPosts, setMyPosts] = useState([]);
-  const [myFavourites, setMyFavourites] = useState([]);
   const [userPhone, setUserPhone] = useState('');
+  const [myPosts, setMyPosts] = useState();
+  const [myFavourites, setMyFavourites] = useState();
   const [activeTab, setActiveTab] = useState('likedPosts'); // State to keep track of active tab
 
   const handleFormSubmit = (e) => {
@@ -42,6 +42,14 @@ const AccountPage = () => {
         }
   }
 
+  const handleUpdateUser = (e) => {
+    const storedUser = getUserId();
+        if(storedUser !== null) {
+          const response = Service.updatePersonalData(getUserId(), {user_firstname: userFirstName, user_lastname: userLastName, user_email: userEmail, user_phone: userPhone});
+          console.log(response);
+        }
+  }
+
   useEffect(() => {
     const user_id = getUserId();
    
@@ -51,10 +59,14 @@ const AccountPage = () => {
       setUserLastName(response.user_lastname);
       setUserEmail(response.user_email);
       setUserPhone(response.user_phone);
-      const result = await axios.get('/my-favourites/' + user_id);
-      setMyFavourites(result.data);
-      const posts = await axios.get('/my-posts/' + user_id);
-      setMyPosts(posts.data);
+      const result = await Service.getMyFavourites(user_id);
+      console.log("result", result)
+      setMyFavourites(result);
+
+      
+      const posts = await Service.getMyPosts(user_id);
+      console.log("posts", posts)
+      setMyPosts(posts);
     };
     fetchData();
   }, []);
@@ -71,18 +83,24 @@ const AccountPage = () => {
         <div style={{marginTop:'64px'}}>
           <h3>Liked posts</h3>
           <div className="post-grid">
-            {myFavourites.map(post => (
+            {/*myFavourites.map(post => (
               <PostCard key={post.post_id} post={post} />
+            ))*/}
+            {myFavourites && myFavourites.map((favourite) => (
+              <PostCard key={favourite.post_id} post={favourite} />
             ))}
+
           </div>
         </div>
         </Tab>
 
         <Tab eventKey="myPosts" title="My Posts">
         <div style={{marginTop:'64px'}}>
-          <h3>My posts</h3>
           <div className="post-grid">
-            {myPosts.map(post => (
+            {/*myPosts.map(post => (
+              <PostCard key={post.post_id} post={post} />
+            ))*/}
+            {myPosts && myPosts.map((post) => (
               <PostCard key={post.post_id} post={post} />
             ))}
           </div>
@@ -133,7 +151,7 @@ const AccountPage = () => {
           </Form.Group>
           <br />
           <br />
-          <Button variant="primary" type="submit">
+          <Button variant="primary" type="submit" onClick={handleUpdateUser}>
             Update
           </Button>
         </Form>

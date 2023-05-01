@@ -8,8 +8,10 @@ const router = express.Router();
 router.use(express.json());
 
 function verifyToken(req, res, next) {
-    const bearer = req.headers['authorization'].split(" ");
-    const token = bearer[1];
+    /*const bearer = req.headers['authorization'].split(" ");
+    const token = bearer[1];*/
+    const token = req.headers['authorization'];
+    console.log(token)
     if (!token) {
         console.log(1);
         return res.status(401).send('Unauthorized request');
@@ -72,7 +74,7 @@ router.get('/:id', verifyToken, (req, res) => {
 router.get('/my-favourites/:id', verifyToken, (req, res) => {
     const { id } = req.params;
     const sql = `SELECT * FROM post_favourites WHERE user_id = ?`;
-    db.get(sql, [id], (err, row) => {
+    db.all(sql, [id], (err, row) => {
         if (err) {
             console.error(err.message);
             res.status(500).json({ error: 'Internal server error' });

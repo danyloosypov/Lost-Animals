@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 const PostPage = () => {
-  const { postId } = useParams();
+  const params = useParams();
+  const [post, setPost] = useState({});
+  const [user, setUser] = useState({});
+  console.log(params.id);
+
+  useEffect(() => {
+    fetch(`http://localhost:3001/posts/${params.id}`)
+      .then((response) => response.json())
+      .then((data) => setPost(data))
+      .catch((error) => console.error(error));
+    fetch(`http://localhost:3001/users/${post.user_id}`)
+      .then((response) => response.json())
+      .then((data) => setUser(data))
+      .catch((error) => console.error(error));
+  }, [params.id]);
   
-  // Assuming this is the post information fetched from API
-  const post = {
-    id: postId,
-    title: 'Lorem Ipsum',
-    body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin auctor lectus urna, quis faucibus erat malesuada in. Maecenas eget neque enim. Maecenas convallis lacinia lectus, vitae lobortis arcu. Etiam semper lorem in enim imperdiet bibendum. Nulla facilisi. Fusce commodo, quam vitae lobortis tristique, elit nulla commodo mi, at bibendum tellus velit nec tellus. Nam blandit elit eget malesuada pulvinar.',
-    imageUrl: 'https://picsum.photos/200/300'
-  };
 
   return (
     <div className="container mt-5">
@@ -24,18 +31,18 @@ const PostPage = () => {
     </div>
     <div className="col-md-8">
       <h1>Lost Animal</h1>
-      <h3>Species Breed</h3>
+      <h3>{post.animal_breed}</h3>
       <ul>
-        <li>Color: red</li>
-        <li>Gender: bitch</li>
-        <li>Location: Kharkiv</li>
+        <li>Color: {post.animal_color}</li>
+        <li>Gender: {post.animal_gender}</li>
+        <li>Location: {post.location}</li>
       </ul>
-      <p>{post.body}</p>
+      <p>{post.description}</p>
       <h3>Contacts</h3>
       <ul>
-        <li>Name: Osypov Danylo</li>
-        <li>Email: dragon-sword@ukr.net</li>
-        <li>Phone: 066-233-22-22</li>
+        <li>Name: {user.user_firstname} {user.user_lastname}</li>
+        <li>Email: {user.user_email}</li>
+        <li>Phone: {user.user_phone}</li>
       </ul>
     </div>
   </div>

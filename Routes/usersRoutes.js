@@ -79,11 +79,11 @@ router.post('/create', verifyToken, (req, res) => {
 
 router.put('/update/:user_id', verifyToken, (req, res) => {
     const { user_id } = req.params;
-    const { user_firstname, user_lastname, user_password, user_email, user_phone } = req.body;
+    const { user_firstname, user_lastname, user_email, user_phone } = req.body;
   
-    db.run(`UPDATE users SET user_firstname = ?, user_lastname = ?, user_password = ?, 
+    db.run(`UPDATE users SET user_firstname = ?, user_lastname = ?, 
       user_email = ?, user_phone = ? WHERE user_id = ?`, 
-      [user_firstname, user_lastname, user_password, user_email, user_phone, user_id], function(err) {
+      [user_firstname, user_lastname, user_email, user_phone, user_id], function(err) {
         if (err) {
             console.error(err);
             res.status(500).send('Error updating user');
