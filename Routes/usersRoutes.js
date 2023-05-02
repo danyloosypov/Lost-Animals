@@ -63,6 +63,22 @@ router.get('/:user_id', verifyToken, (req, res) => {
     });
 });
 
+router.get('/post-user/:user_id', (req, res) => {
+    const { user_id } = req.params;
+
+    db.get('SELECT user_id, user_firstname, user_lastname, user_email, user_phone FROM users WHERE user_id = ?', [user_id], (err, row) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error retrieving user from database');
+        } else if (row) {
+            console.log(row);
+            res.status(200).json(row);
+        } else {
+            res.status(404).send('User not found');
+        }
+    });
+});
+
 router.post('/create', verifyToken, (req, res) => {
     const { user_firstname, user_lastname, user_password, user_email, user_phone } = req.body;
   

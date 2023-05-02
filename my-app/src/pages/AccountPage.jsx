@@ -28,8 +28,6 @@ const AccountPage = () => {
     return storedUser;
   }
 
-
-
   const handleTabSelect = (tabKey) => {
     setActiveTab(tabKey);
   }
@@ -71,103 +69,106 @@ const AccountPage = () => {
     fetchData();
   }, []);
 
-
-  return (
-    <div>
-
-      <Container style={{marginTop: '64px'}}>
-        <h1>Personal Account</h1>
-        <Tabs activeKey={activeTab} onSelect={handleTabSelect} style={{marginTop:'32px'}}>
-
-        <Tab eventKey="likedPosts" title="Liked Posts">
-        <div style={{marginTop:'64px'}}>
-          <h3>Liked posts</h3>
-          <div className="post-grid">
-            {/*myFavourites.map(post => (
-              <PostCard key={post.post_id} post={post} />
-            ))*/}
-            {myFavourites && myFavourites.map((favourite) => (
-              <PostCard key={favourite.post_id} post={favourite} />
-            ))}
-
+  if (!getUserId()) {
+    return (
+      <div style={{marginTop: '64px', marginLeft: '64px'}}>
+        <h1>Please register</h1>
+        <a href="/register">You may register here</a>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+  
+        <Container style={{marginTop: '64px'}}>
+          <h1>Personal Account</h1>
+          <Tabs activeKey={activeTab} onSelect={handleTabSelect} style={{marginTop:'32px'}}>
+  
+          <Tab eventKey="likedPosts" title="Liked Posts">
+          <div style={{marginTop:'64px'}}>
+            <h3>Liked posts</h3>
+            <div className="post-grid">
+              {myFavourites && myFavourites.map((favourite) => (
+                <PostCard key={favourite.post_id} post={favourite} />
+              ))}
+  
+            </div>
           </div>
-        </div>
-        </Tab>
-
-        <Tab eventKey="myPosts" title="My Posts">
-        <div style={{marginTop:'64px'}}>
-          <div className="post-grid">
-            {/*myPosts.map(post => (
-              <PostCard key={post.post_id} post={post} />
-            ))*/}
-            {myPosts && myPosts.map((post) => (
-              <PostCard key={post.post_id} post={post} />
-            ))}
+          </Tab>
+  
+          <Tab eventKey="myPosts" title="My Posts">
+          <div style={{marginTop:'64px'}}>
+            <div className="post-grid">
+              {myPosts && myPosts.map((post) => (
+                <PostCard key={post.post_id} post={post} />
+              ))}
+            </div>
           </div>
-        </div>
-        </Tab>
+          </Tab>
+          
+          <Tab eventKey="myData" title="My Data">
+          <Form onSubmit={handleFormSubmit} style={{width:'50%', margin: 'auto', marginTop:'60px'}}>
+          <br />
+            <Form.Group controlId="userFirstName">
+              <Form.Label>First Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your first name"
+                value={userFirstName}
+                onChange={(e) => setUserFirstName(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Form.Group controlId="userLastName">
+              <Form.Label>Last Name</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your last name"
+                value={userLastName}
+                onChange={(e) => setUserLastName(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Form.Group controlId="userEmail">
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Enter your email"
+                value={userEmail}
+                onChange={(e) => setUserEmail(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <Form.Group controlId="userPhone">
+              <Form.Label>Phone</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="Enter your phone number"
+                value={userPhone}
+                onChange={(e) => setUserPhone(e.target.value)}
+              />
+            </Form.Group>
+            <br />
+            <br />
+            <Button variant="primary" type="submit" onClick={handleUpdateUser}>
+              Update
+            </Button>
+          </Form>
+          </Tab>
+          <Tab eventKey="deleteAccount" title="Delete Account">
+          <div style={{marginTop:'64px'}}>
+            <h3>Are you sure?</h3>
+            <button className="btn btn-danger" onClick={handleDeleteUser}>Confirm</button>
+          </div>
+          </Tab>
+          </Tabs>
+        </Container>
         
-        <Tab eventKey="myData" title="My Data">
-        <Form onSubmit={handleFormSubmit} style={{width:'50%', margin: 'auto', marginTop:'60px'}}>
-        <br />
-          <Form.Group controlId="userFirstName">
-            <Form.Label>First Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter your first name"
-              value={userFirstName}
-              onChange={(e) => setUserFirstName(e.target.value)}
-            />
-          </Form.Group>
-          <br />
-          <Form.Group controlId="userLastName">
-            <Form.Label>Last Name</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter your last name"
-              value={userLastName}
-              onChange={(e) => setUserLastName(e.target.value)}
-            />
-          </Form.Group>
-          <br />
-          <Form.Group controlId="userEmail">
-            <Form.Label>Email</Form.Label>
-            <Form.Control
-              type="email"
-              placeholder="Enter your email"
-              value={userEmail}
-              onChange={(e) => setUserEmail(e.target.value)}
-            />
-          </Form.Group>
-          <br />
-          <Form.Group controlId="userPhone">
-            <Form.Label>Phone</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter your phone number"
-              value={userPhone}
-              onChange={(e) => setUserPhone(e.target.value)}
-            />
-          </Form.Group>
-          <br />
-          <br />
-          <Button variant="primary" type="submit" onClick={handleUpdateUser}>
-            Update
-          </Button>
-        </Form>
-        </Tab>
-        <Tab eventKey="deleteAccount" title="Delete Account">
-        <div style={{marginTop:'64px'}}>
-          <h3>Are you sure?</h3>
-          <button className="btn btn-danger" onClick={handleDeleteUser}>Confirm</button>
-        </div>
-        </Tab>
-        </Tabs>
-      </Container>
+      </div>
       
-    </div>
-    
-  );
+    );
+  }
+ 
 }
 
 

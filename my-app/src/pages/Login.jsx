@@ -16,8 +16,19 @@ function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const headers = {
-      'Content-Type': 'application/json', // Example header
-    };
+    'Content-Type': 'application/json', // Example header
+  };
+
+  
+  const cookieValue = document.cookie
+  .split(';')
+  .map(cookie => cookie.split('='))
+  .find(([key, value]) => key.trim() === 'user_id');
+  const storedUser = cookieValue ? cookieValue[1] : null;
+  if(storedUser !== null) {
+    window.location.href = '/';
+  }
+  
   
 
   const handleLogin = () => {
@@ -40,7 +51,7 @@ function Login() {
         const storedToken = cookieValue ? cookieValue[1] : null;
         console.log('Token', storedToken);
 
-        
+        window.location.href = '/';
       })
       .catch(error => {
         // Handle login error
@@ -69,6 +80,7 @@ function Login() {
 
             <MDBBtn className="mb-4 px-5 mx-5 w-100" color='info' size='lg' onClick={handleLogin}>Login</MDBBtn>
             <p className='ms-5'>Don't have an account? <a href="/register">Register here</a></p>
+            <p className='ms-5'><a href="/">Return to Home page</a></p>
 
           </div>
 

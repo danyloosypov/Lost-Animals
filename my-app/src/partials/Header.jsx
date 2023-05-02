@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useCookies } from 'react-cookie';
+
 import {
   MDBNavbar,
   MDBNavbarNav,
@@ -13,6 +15,13 @@ import {
 
 export default function Header() {
   const [showBasic, setShowBasic] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(['user_id', 'token']);
+
+  const handleLogout = () => {
+    removeCookie('user_id');
+    removeCookie('token');
+    window.location.href = '/'; // navigate to login page
+  };
 
   return (
     <header>
@@ -55,9 +64,20 @@ export default function Header() {
         </a>
       </li>
       <li className="nav-item">
-        <a className="nav-link" href="#">
-          Logout
+        <a className="nav-link" href="/post-form">
+          Publish Post
         </a>
+      </li>
+      <li className="nav-item">
+        {cookies.user_id || cookies.token ? (
+          <a className="nav-link" href="#" onClick={handleLogout}>
+            Logout
+          </a>
+        ) : (
+          <a className="nav-link" href="/login">
+            Login
+          </a>
+        )}
       </li>
     </ul>
   </div>

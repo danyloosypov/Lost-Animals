@@ -30,6 +30,16 @@ export default class Service {
         
     }
 
+    static async getAnimals() {
+        try {
+            const animals = await axios.get('http://localhost:3001/animals/', Service.getConfig())
+            return animals.data
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
     static async getFoundAnimals(data) {
         try {
             const posts = await axios.get('http://localhost:3001/posts/', { params: data })
@@ -117,7 +127,7 @@ export default class Service {
 
     static async addPost(data) {
         try {
-            const response = await axios.get('http://localhost:3001/posts/create', data)
+            const response = await axios.post('http://localhost:3001/posts/create', data, Service.getConfig())
             return response.data
         } catch (error) {
             console.log(error)
@@ -137,7 +147,7 @@ export default class Service {
 
     static async deletePost(post_id) {
         try {
-            const response = await axios.delete('http://localhost:3001/posts/' + post_id)
+            const response = await axios.delete('http://localhost:3001/posts/delete/' + post_id, Service.getConfig())
             return response.data
         } catch (error) {
             console.log(error)

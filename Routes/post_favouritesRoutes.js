@@ -73,7 +73,12 @@ router.get('/:id', verifyToken, (req, res) => {
 
 router.get('/my-favourites/:id', verifyToken, (req, res) => {
     const { id } = req.params;
-    const sql = `SELECT * FROM post_favourites WHERE user_id = ?`;
+    const sql = `
+        SELECT p.*
+        FROM posts p
+        INNER JOIN post_favourites pf ON pf.post_id = p.post_id
+        WHERE pf.user_id = ?
+    `;
     db.all(sql, [id], (err, row) => {
         if (err) {
             console.error(err.message);

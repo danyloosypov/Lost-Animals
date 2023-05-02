@@ -22,8 +22,17 @@ function Registration() {
     const [lastName, setLastName] = useState('');
 
     const headers = {
-        'Content-Type': 'application/json', // Example header
-      };
+      'Content-Type': 'application/json', // Example header
+    };
+
+    const cookieValue = document.cookie
+    .split(';')
+    .map(cookie => cookie.split('='))
+    .find(([key, value]) => key.trim() === 'user_id');
+    const storedUser = cookieValue ? cookieValue[1] : null;
+    if(storedUser !== null) {
+      window.location.href = '/';
+    }
     
   
     const handleRegister = () => {

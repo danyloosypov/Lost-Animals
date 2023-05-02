@@ -58,7 +58,14 @@ function App() {
             }
           />
 
-
+          <Route
+            path="/post-form"
+            element={
+              <Layout>
+                <PostForm /> {/* HomePage component */}
+              </Layout>
+            }
+          />
           
           <Route
             path="/my-account"
