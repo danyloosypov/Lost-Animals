@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Service from '../API/Service'
+import { useNavigate } from "react-router-dom";
 
 const PostPage = () => {
   const params = useParams();
   const [post, setPost] = useState({});
   const [user, setUser] = useState({});
+  const navigate = useNavigate()
+
 
   useEffect(() => {
     fetch(`http://localhost:3001/posts/${params.id}`)
@@ -51,12 +54,11 @@ const PostPage = () => {
     <div className="container mt-5">
   <div className="row">
     <div className="col-md-4">
-      <img src={`http://localhost:3001/${post.post_image}`} alt="post" className="img-fluid" />
-
+      <img src={`http://localhost:3001/${post.post_image}`} style={{maxHeight: '450px'}} alt="post" className="img-fluid" />
       {isCurrentUserPost && (
         <div className="mt-2">
           <button className='btn btn-danger' onClick={handleDeletePost}>Delete</button>
-          <button className='btn btn-primary'>Edit</button>
+          <button className='btn btn-primary' onClick={()=>navigate(`/post/${post.post_id}`)}>Edit</button>
         </div>
       )}
     </div>

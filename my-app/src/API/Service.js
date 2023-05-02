@@ -127,7 +127,12 @@ export default class Service {
 
     static async addPost(data) {
         try {
-            const response = await axios.post('http://localhost:3001/posts/create', data, Service.getConfig())
+            const response = await axios.post('http://localhost:3001/posts/create', data, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                  ...Service.getConfig().headers,
+                },
+            })
             return response.data
         } catch (error) {
             console.log(error)
