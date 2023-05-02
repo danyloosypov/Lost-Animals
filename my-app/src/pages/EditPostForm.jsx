@@ -16,6 +16,23 @@ const EditPostForm = () => {
   const [imageFile, setImageFile] = useState(null);
   const navigate = useNavigate()
 
+  useEffect(() => {
+    const fetchData = async () => {
+        const post = await Service.getPost(params.id);
+        setPostMode(post.post_mode);
+        setAnimalSpecies(post.animal_id);
+        setAnimalBreed(post.animal_breed);
+        setAnimalColor(post.animal_color);
+        setAnimalGender(post.animal_gender);
+        setLocation(post.location);
+        setDescription(post.description)
+        setImageFile(post.post_image)
+        console.log(params.id)
+        console.log(post)
+    }
+    fetchData();
+  }, [params.id]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,11 +55,11 @@ const EditPostForm = () => {
     formData.append('post_image', imageFile);
     formData.append('description', description);
     console.log(postMode, animalSpecies, animalBreed, animalColor, animalGender, location, description, imageFile)
-    const addPost = async () => {
-      const response = Service.addPost(formData);
+    const UpdatePost = async () => {
+      const response = Service.updatePost(params.id, formData);
       console.log(response);
     };
-    addPost();
+    UpdatePost();
   }
 
   function getUserId() {
@@ -136,6 +153,7 @@ const EditPostForm = () => {
         <br />
         <button type="submit" className="btn btn-primary" onClick={handleSubmit}>Submit</button>
       </form>
+      <img src={`http://localhost:3001/${imageFile}`} style={{maxHeight: '450px'}} alt="post" className="img-fluid" />
     </div>
   );
   }

@@ -6,6 +6,7 @@ import Registration from './pages/Registration';
 import AccountPage from './pages/AccountPage';
 import PostForm from './pages/PostForm';
 import FoundPage from './pages/FoundPage';
+import EditPostForm from './pages/EditPostForm';
 import HomePage from './pages/HomePage';
 import LostPage from './pages/LostPage';
 import PostPage from './pages/PostPage';
@@ -63,6 +64,15 @@ function App() {
             element={
               <Layout>
                 <PostForm /> {/* HomePage component */}
+              </Layout>
+            }
+          />
+
+          <Route
+            path="/edit-post/:id"
+            element={
+              <Layout>
+                <EditPostForm /> {/* HomePage component */}
               </Layout>
             }
           />

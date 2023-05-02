@@ -58,7 +58,7 @@ const PostPage = () => {
       {isCurrentUserPost && (
         <div className="mt-2">
           <button className='btn btn-danger' onClick={handleDeletePost}>Delete</button>
-          <button className='btn btn-primary' onClick={()=>navigate(`/post/${post.post_id}`)}>Edit</button>
+          <button className='btn btn-primary' onClick={()=>navigate(`/edit-post/${post.post_id}`)}>Edit</button>
         </div>
       )}
     </div>

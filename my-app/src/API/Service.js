@@ -142,7 +142,12 @@ export default class Service {
 
     static async updatePost(post_id, data) {
         try {
-            const response = await axios.put('http://localhost:3001/posts/update' + post_id, data)
+            const response = await axios.put('http://localhost:3001/posts/update/' + post_id, data, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                  ...Service.getConfig().headers,
+                },
+            })
             return response.data
         } catch (error) {
             console.log(error)
