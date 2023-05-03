@@ -15,6 +15,7 @@ import Footer from './partials/Footer';
 import Layout from './components/Layout';
 import AdminHomePage from './pages/admin/AdminHomePage';
 import EditAnimal from './pages/admin/EditAnimal';
+import AdminLogin from './pages/admin/AdminLogin';
 
 
 function App() {
@@ -29,6 +30,15 @@ function App() {
                 <Login /> 
             }
           />
+
+          <Route
+            path="/admin-login"
+            element={
+                <AdminLogin /> 
+            }
+          />
+
+
           <Route
             path="/register"
             element={

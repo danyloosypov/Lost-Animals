@@ -17,19 +17,14 @@ const AdminHomePage = () => {
     setActiveTab(tabKey);
   }
 
-  useEffect(() => {   
-    const fetchData = async () => {
-     /* const result = await Service.getMyFavourites(user_id);
-      console.log("result", result)
-      setMyFavourites(result);
-
-      
-      const posts = await Service.getMyPosts(user_id);
-      console.log("posts", posts)
-      setMyPosts(posts);*/
-    };
-    fetchData();
-  }, []);
+  const cookieValue = document.cookie
+    .split(';')
+    .map(cookie => cookie.split('='))
+    .find(([key, value]) => key.trim() === 'admin_id');
+    const storedUser = cookieValue ? cookieValue[1] : null;
+    if(storedUser === null) {
+      window.location.href = '/admin-login';
+    }
 
     return (
       <div>

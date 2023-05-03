@@ -81,4 +81,40 @@ router.post('/register', async (req, res) => {
     }
   });
 
+  router.post('/admin-login', async (req, res) => {
+    console.log(req.body)
+    try {
+      // Find user by username
+      db.get('SELECT * FROM admins WHERE admin_email = ?', [req.body.admin_email], async (err, row) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send('Internal Server Error');
+        }
+  
+        if (!row) {
+          return res.status(401).send('Invalid email or password');
+        }
+  
+        // Compare password
+        const isPasswordValid = await bcrypt.compare(req.body.admin_password, row.admin_password);
+        if (!isPasswordValid) {
+          return res.status(401).send('Invalid email or password');
+        }
+  
+        // Generate JWT token
+        const token = jwt.sign({ admin_id: row.admin_id }, SECRET_KEY, { expiresIn: '1h' });
+
+        console.log(token)
+
+        console.log(row.user_id)
+  
+        // Send success response with JWT token
+        res.json({ token, admin_id: row.admin_id  });
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
 export default router;
