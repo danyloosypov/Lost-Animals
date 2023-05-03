@@ -92,10 +92,10 @@ router.get('/my-favourites/:id', verifyToken, (req, res) => {
 });
 
 // DELETE a post favourite by ID
-router.delete('/:id', verifyToken, (req, res) => {
-    const { id } = req.params;
-    const sql = `DELETE FROM post_favourites WHERE favourites_id = ?`;
-    db.run(sql, [id], function(err) {
+router.delete('/:postId/:userId', verifyToken, (req, res) => {
+    const { postId, userId } = req.params;
+    const sql = `DELETE FROM post_favourites WHERE post_id = ? AND user_id = ?`;
+    db.run(sql, [postId, userId], function(err) {
         if (err) {
             console.error(err.message);
             res.status(500).json({ error: 'Internal server error' });

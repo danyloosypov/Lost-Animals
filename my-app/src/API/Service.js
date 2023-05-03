@@ -51,11 +51,7 @@ export default class Service {
     }
 
     static async getPersonalData(id) {
-        const token = Service.getToken();
         try {
-            const config = {
-                headers: { Authorization: `${token}` }
-            }
             const response = await axios.get('http://localhost:3001/users/' + id, Service.getConfig())
             console.log("sdfsfs", response.data)
             return response.data
@@ -107,7 +103,7 @@ export default class Service {
 
     static async addToFavourites(post_id, user_id) {
         try {
-            const response = await axios.post('http://localhost:3001/post_favourites/create', { post_id, user_id })
+            const response = await axios.post('http://localhost:3001/post_favourites/create', { post_id, user_id }, Service.getConfig())
             return response.data
         } catch (error) {
             console.log(error)
@@ -115,14 +111,13 @@ export default class Service {
         
     }
 
-    static async deleteFromFavourites(id) {
+    static async deleteFromFavourites(post_id, user_id) {
         try {
-            const response = await axios.delete('http://localhost:3001/post_favourites/' + id)
-            return response.data
+          const response = await axios.delete(`http://localhost:3001/post_favourites/${post_id}/${user_id}`, Service.getConfig());
+          return response.data;
         } catch (error) {
-            console.log(error)
+          console.log(error);
         }
-        
     }
 
     static async addPost(data) {
