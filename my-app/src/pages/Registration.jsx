@@ -42,7 +42,7 @@ function Registration() {
       Axios.post('/auth/register', { user_email: email,
         user_password: password, user_phone: phone, user_lastname: lastName, user_firstname: firstName }, { headers })
         .then(response => {
-          window.location.href = '/';
+          window.location.href = '/login';
           console.log('Login successful');
         })
         .catch(error => {

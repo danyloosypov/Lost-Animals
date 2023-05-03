@@ -13,6 +13,8 @@ import PostPage from './pages/PostPage';
 import Header from './partials/Header';
 import Footer from './partials/Footer';
 import Layout from './components/Layout';
+import AdminHomePage from './pages/admin/AdminHomePage';
+import EditAnimal from './pages/admin/EditAnimal';
 
 
 function App() {
@@ -78,11 +80,27 @@ function App() {
           />
           
           <Route
+            path="/edit-animal/:id"
+            element={
+              <Layout>
+                <EditAnimal /> {/* HomePage component */}
+              </Layout>
+            }
+          />
+          
+          <Route
             path="/my-account"
             element={
               <Layout>
                 <AccountPage /> {/* HomePage component */}
               </Layout>
+            }
+          />
+
+          <Route
+            path="/admin-site"
+            element={
+                <AdminHomePage /> 
             }
           />
 

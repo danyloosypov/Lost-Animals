@@ -30,9 +30,69 @@ export default class Service {
         
     }
 
+    static async getUsers() {
+        try {
+            const users = await axios.get('http://localhost:3001/users/', Service.getConfig())
+            return users.data
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
+    static async deleteUserFromAdmin(id) {
+        try {
+            const users = await axios.delete('http://localhost:3001/users/delete/' + id, Service.getConfig())
+            return users.data
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
     static async getAnimals() {
         try {
             const animals = await axios.get('http://localhost:3001/animals/', Service.getConfig())
+            return animals.data
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
+    static async getAnimal(id) {
+        try {
+            const animals = await axios.get('http://localhost:3001/animals/' + id, Service.getConfig())
+            return animals.data
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
+    static async addAnimal(data) {
+        try {
+            const animals = await axios.post('http://localhost:3001/animals/create', data, Service.getConfig())
+            return animals.data
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
+    static async updateAnimal(id, data) {
+        try {
+            const animals = await axios.put('http://localhost:3001/animals/update/' + id, data, Service.getConfig())
+            return animals.data
+        } catch (error) {
+            console.log(error)
+        }
+        
+    }
+
+    static async deleteAnimal(id) {
+        try {
+            const animals = await axios.delete('http://localhost:3001/animals/delete/' + id, Service.getConfig())
             return animals.data
         } catch (error) {
             console.log(error)
